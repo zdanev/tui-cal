@@ -1,4 +1,5 @@
 using Terminal.Gui;
+using tui_cal;
 
 Application.Init();
 var top = Application.Top;
@@ -13,6 +14,16 @@ var win = new Window("TUI Calendar")
     Width = Dim.Fill(),
     Height = Dim.Fill()
 };
+
+var monthView = new MonthView(DateTime.Now)
+{
+    X = 0,
+    Y = 0,
+    Width = 35,
+    Height = 10
+};
+
+win.Add(monthView);
 
 top.Add(win);
 Application.Run();
