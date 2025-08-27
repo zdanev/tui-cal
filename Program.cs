@@ -20,7 +20,14 @@ var monthView = new MonthView(DateTime.Now)
     X = 0,
     Y = 0,
     Width = 35,
-    Height = Dim.Fill()
+    Height = Dim.Fill(),
+    ColorScheme = new ColorScheme
+    {
+        Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.White, Terminal.Gui.Color.Blue),
+        Focus = new Terminal.Gui.Attribute(Terminal.Gui.Color.White, Terminal.Gui.Color.Blue),
+        HotNormal = new Terminal.Gui.Attribute(Terminal.Gui.Color.White, Terminal.Gui.Color.Blue),
+        HotFocus = new Terminal.Gui.Attribute(Terminal.Gui.Color.White, Terminal.Gui.Color.Blue)
+    }
 };
 
 var lineView = new View()
@@ -45,6 +52,10 @@ var dayView = new DayView(DateTime.Now)
     Y = 0,
     Width = Dim.Fill(),
     Height = Dim.Fill()
+};
+
+monthView.SelectedDateChanged += (date) => {
+    dayView.Date = date;
 };
 
 win.Add(monthView, lineView, dayView);

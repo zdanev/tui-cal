@@ -8,10 +8,46 @@ namespace tui_cal
     public class MonthView : View
     {
         private DateTime _date;
+        private DateTime _selectedDate;
+
+        public event Action<DateTime>? SelectedDateChanged;
+
+        public DateTime SelectedDate
+        {
+            get => _selectedDate;
+            set
+            {
+                _selectedDate = value;
+                SelectedDateChanged?.Invoke(_selectedDate);
+                SetNeedsDisplay();
+            }
+        }
 
         public MonthView(DateTime date)
         {
             _date = date;
+            _selectedDate = date;
+            CanFocus = true;
+        }
+
+        public override bool ProcessKey(KeyEvent keyEvent)
+        {
+            switch (keyEvent.Key)
+            {
+                case Key.CursorUp:
+                    SelectedDate = SelectedDate.AddDays(-7);
+                    return true;
+                case Key.CursorDown:
+                    SelectedDate = SelectedDate.AddDays(7);
+                    return true;
+                case Key.CursorLeft:
+                    SelectedDate = SelectedDate.AddDays(-1);
+                    return true;
+                case Key.CursorRight:
+                    SelectedDate = SelectedDate.AddDays(1);
+                    return true;
+            }
+            return base.ProcessKey(keyEvent);
         }
 
         public override void OnDrawContent(Rect contentArea)
@@ -57,7 +93,24 @@ namespace tui_cal
             {
                 Move(x, y);
                 var date = new DateTime(_date.Year, _date.Month, day);
-                if (date.Date == DateTime.Now.Date)
+
+                if (date.Date == SelectedDate.Date && date.Date == DateTime.Now.Date)
+                {
+                    var currentAttribute = driver.GetAttribute();
+                    var combinedAttribute = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightRed, currentAttribute.Foreground);
+                    driver.SetAttribute(combinedAttribute);
+                    driver.AddStr($"{day,3} ");
+                    driver.SetAttribute(currentAttribute);
+                }
+                else if (date.Date == SelectedDate.Date)
+                {
+                    var currentAttribute = driver.GetAttribute();
+                    var reverseAttribute = new Terminal.Gui.Attribute(currentAttribute.Background, currentAttribute.Foreground);
+                    driver.SetAttribute(reverseAttribute);
+                    driver.AddStr($"{day,3} ");
+                    driver.SetAttribute(currentAttribute);
+                }
+                else if (date.Date == DateTime.Now.Date)
                 {
                     var currentAttribute = driver.GetAttribute();
                     var highlightAttribute = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightRed, currentAttribute.Background);

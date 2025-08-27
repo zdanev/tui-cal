@@ -7,6 +7,16 @@ namespace tui_cal
     {
         private DateTime _date;
 
+        public DateTime Date
+        {
+            get => _date;
+            set
+            {
+                _date = value;
+                SetNeedsDisplay();
+            }
+        }
+
         private const int StartHour = 6;
 
         public DayView(DateTime date)
