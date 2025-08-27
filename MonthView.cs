@@ -56,7 +56,19 @@ namespace tui_cal
             for (int day = 1; day <= daysInMonth; day++)
             {
                 Move(x, y);
-                driver.AddStr($"{day,3} ");
+                var date = new DateTime(_date.Year, _date.Month, day);
+                if (date.Date == DateTime.Now.Date)
+                {
+                    var currentAttribute = driver.GetAttribute();
+                    var reverseAttribute = new Terminal.Gui.Attribute(currentAttribute.Background, currentAttribute.Foreground);
+                    driver.SetAttribute(reverseAttribute);
+                    driver.AddStr($"{day,3} ");
+                    driver.SetAttribute(currentAttribute);
+                }
+                else
+                {
+                    driver.AddStr($"{day,3} ");
+                }
                 x += 5;
                 if ((x / 5 + (int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek) % 7 == (int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek)
                 {
