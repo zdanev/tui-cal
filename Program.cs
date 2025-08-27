@@ -20,10 +20,34 @@ var monthView = new MonthView(DateTime.Now)
     X = 0,
     Y = 0,
     Width = 35,
-    Height = 10
+    Height = Dim.Fill()
 };
 
-win.Add(monthView);
+var lineView = new View()
+{
+    X = 35,
+    Y = 0,
+    Width = 1,
+    Height = Dim.Fill()
+};
+
+lineView.DrawContent += (Rect content) => {
+    for (int i = 0; i < lineView.Bounds.Height; i++)
+    {
+        lineView.Move(0, i);
+        Application.Driver.AddRune('│');
+    }
+};
+
+var dayView = new DayView(DateTime.Now)
+{
+    X = 36,
+    Y = 0,
+    Width = Dim.Fill(),
+    Height = Dim.Fill()
+};
+
+win.Add(monthView, lineView, dayView);
 
 top.Add(win);
 Application.Run();

@@ -60,8 +60,8 @@ namespace tui_cal
                 if (date.Date == DateTime.Now.Date)
                 {
                     var currentAttribute = driver.GetAttribute();
-                    var reverseAttribute = new Terminal.Gui.Attribute(currentAttribute.Background, currentAttribute.Foreground);
-                    driver.SetAttribute(reverseAttribute);
+                    var highlightAttribute = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightRed, currentAttribute.Background);
+                    driver.SetAttribute(highlightAttribute);
                     driver.AddStr($"{day,3} ");
                     driver.SetAttribute(currentAttribute);
                 }
