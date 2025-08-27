@@ -12,7 +12,7 @@ var win = new Window("TUI Calendar")
 
     // By using Dim.Fill(), it will automatically resize without manual intervention
     Width = Dim.Fill(),
-    Height = Dim.Fill()
+    Height = Dim.Fill(1)
 };
 
 var monthView = new MonthView(DateTime.Now)
@@ -60,5 +60,16 @@ monthView.SelectedDateChanged += (date) => {
 
 win.Add(monthView, lineView, dayView);
 
-top.Add(win);
+var menu = new MenuBar(new MenuBarItem[] {
+    new MenuBarItem ("_File", new MenuItem [] {
+        new MenuItem ("_Quit", "", () => { Application.RequestStop(); })
+    })
+});
+
+var statusBar = new StatusBar(new StatusItem[] {
+    new StatusItem(Key.F1, "~F1~ Help", null),
+    new StatusItem(Key.Q, "~Q~ Quit", () => { Application.RequestStop(); })
+});
+
+top.Add(menu, win, statusBar);
 Application.Run();
